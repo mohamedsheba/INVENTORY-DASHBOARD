@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Trash2 } from 'lucide-react'
 import Modal from '../components/Modal.jsx'
 import ProductForm from '../components/ProductForm.jsx'
 import StockGauge from '../components/StockGauge.jsx'
@@ -14,6 +15,7 @@ const COLUMNS = [
 	{ key: 'supplier', label: 'Supplier' },
 	{ key: 'quantity', label: 'Stock' },
 	{ key: 'price', label: 'Price', align: 'right' },
+	{ key: 'actions', label: 'Actions', align: "right" },
 ]
 
 export default function Products() {
@@ -250,7 +252,6 @@ export default function Products() {
 											</button>
 										</th>
 									))}
-									<th><span className="visually-hidden">Actions</span></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -266,9 +267,21 @@ export default function Products() {
 											<StockGauge product={item} />
 											<span className={`status ${stockStatus(item)}`}>{STATUS_LABEL[stockStatus(item)]}</span>
 										</td>
-										<td className="right num" data-label="Price">{money.format(item.price)}</td>										<td className="row-actions">
-											<button className="link" onClick={() => setEditing(item)}>Edit</button>
-											<button className="link danger" onClick={() => setDeleting(item)}>Delete</button>
+										<td className="right num" data-label="Price">{money.format(item.price)}</td>
+										<td>
+											<div className="row-actions">
+												<button className="btn small" onClick={() => setEditing(item)}>Edit</button>
+												<button
+													className="btn small icon-danger"
+													aria-label={`Delete ${item.name}`}
+													title="Delete"
+													onClick={() => {
+														setDeleting(item)
+													}}
+												>
+													<Trash2 size={16} aria-hidden="true" />
+												</button>
+											</div>
 										</td>
 									</tr>
 								))}

@@ -1,11 +1,14 @@
 // Mock data. Field names mirror the future Supabase columns (snake_case → camelCase in the service layer).
 
+const daysAgo = (n) => new Date(Date.now() - n * 864e5).toISOString()
+
 export const categories = [
-  { id: 'cat-1', name: 'Electronics' },
-  { id: 'cat-2', name: 'Office supplies' },
-  { id: 'cat-3', name: 'Packaging' },
-  { id: 'cat-4', name: 'Tools' },
-  { id: 'cat-5', name: 'Cleaning' },
+  { id: 'cat-1', name: 'Electronics', description: 'Scanners, printers, tablets and accessories for warehouse operations.', status: 'active', color: '#2F5D8A', createdAt: daysAgo(210) },
+  { id: 'cat-2', name: 'Office supplies', description: 'Paper, markers, staplers and everyday desk items.', status: 'active', color: '#B7791F', createdAt: daysAgo(180) },
+  { id: 'cat-3', name: 'Packaging', description: 'Boxes, film, tape and strapping for outgoing orders.', status: 'active', color: '#2E7D5A', createdAt: daysAgo(160) },
+  { id: 'cat-4', name: 'Tools', description: 'Hand tools, power tools and handling equipment.', status: 'active', color: '#566573', createdAt: daysAgo(120) },
+  { id: 'cat-5', name: 'Cleaning', description: 'Cleaning products and protective consumables.', status: 'active', color: '#2A8C8C', createdAt: daysAgo(90) },
+  { id: 'cat-6', name: 'Safety gear', description: 'Helmets, vests and protective equipment. Not stocked yet.', status: 'inactive', color: '#6B5B95', createdAt: daysAgo(14) },
 ]
 
 export const suppliers = [

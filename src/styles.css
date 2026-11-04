@@ -265,10 +265,12 @@ select:hover {
   border-radius: var(--radius);
   padding: 9px 16px;
   min-height: 40px;
+  transition: 0.15s ease-in-out;
 }
 
 .btn:hover:not(:disabled) {
-  background: #fff;
+  background: var(--ink);
+  color: var(--panel);
 }
 
 .btn.primary {
@@ -285,6 +287,12 @@ select:hover {
   background: var(--alert);
   color: #fff;
   border-color: var(--alert);
+  transition: 0.1s ease-in-out;
+}
+
+.btn.danger-solid:hover {
+  color: var(--alert);
+  background: #fff;
 }
 
 .btn.small {
@@ -404,6 +412,10 @@ th .sort:hover {
 }
 
 .row-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
   white-space: nowrap;
   text-align: right;
 }
@@ -804,4 +816,220 @@ button.stat-card {
   .scrim {
     transition: none;
   }
+}
+
+/* ---------- Categories page ---------- */
+
+/* Form controls */
+textarea {
+  font: inherit;
+  color: var(--ink);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 9px 12px;
+  width: 100%;
+  resize: vertical;
+}
+
+textarea:hover {
+  border-color: var(--steel);
+}
+
+input[type="radio"] {
+  width: auto;
+  min-height: 0;
+  margin-top: 3px;
+  accent-color: var(--ink);
+}
+
+.field-label {
+  display: block;
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 5px;
+}
+
+.hint {
+  color: var(--steel);
+  font-size: 13px;
+  margin: 5px 0 0;
+  text-align: right;
+}
+
+.form-error {
+  color: var(--alert);
+  font-weight: 600;
+  margin: 0 0 14px;
+}
+
+/* Color picker */
+.swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 4px;
+}
+
+.swatch {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius);
+  border: 2px solid transparent;
+  cursor: pointer;
+  padding: 0;
+}
+
+.swatch.selected {
+  box-shadow:
+    0 0 0 2px var(--panel),
+    0 0 0 4px var(--ink);
+}
+
+/* Table */
+.cat-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cat-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+td.desc {
+  max-width: 300px;
+  color: var(--steel);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.muted {
+  color: var(--steel);
+  opacity: 0.7;
+}
+
+th .th-text {
+  display: block;
+  padding: 11px 16px;
+}
+
+th.right .th-text {
+  text-align: right;
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid currentColor;
+}
+
+.badge.active {
+  color: var(--ok);
+}
+
+.badge.inactive {
+  color: var(--alert);
+}
+
+/* Row actions */
+.btn.icon-danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 10px;
+  color: var(--alert);
+  border-color: var(--alert);
+}
+
+.btn.icon-danger:hover:not(:disabled) {
+  background: var(--alert);
+  color: #fff;
+}
+
+/* Delete modal choices */
+.choices {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.choice {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  cursor: pointer;
+  background: var(--panel);
+}
+
+.choice:hover:not(.disabled) {
+  border-color: var(--steel);
+}
+
+.choice.selected {
+  border-color: var(--ink);
+  box-shadow: 0 0 0 1px var(--ink);
+  background: #fff;
+}
+
+.choice.danger.selected {
+  border-color: var(--alert);
+  box-shadow: 0 0 0 1px var(--alert);
+}
+
+.choice.disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.choice-body {
+  display: grid;
+  gap: 2px;
+}
+
+.choice-title {
+  font-weight: 600;
+}
+
+.choice-desc {
+  color: var(--steel);
+  font-size: 14px;
+}
+
+.choice-extra {
+  padding-left: 32px;
+}
+
+.product-preview {
+  margin: 0;
+  padding: 10px 14px 10px 36px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--steel);
+  font-size: 14px;
+}
+
+/* Success message */
+.toast {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 40;
+  max-width: min(420px, calc(100vw - 40px));
+  padding: 12px 16px;
+  background: var(--ink);
+  color: #fff;
+  border-radius: var(--radius);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
