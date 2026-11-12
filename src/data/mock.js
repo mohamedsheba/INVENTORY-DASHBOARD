@@ -12,10 +12,11 @@ export const categories = [
 ]
 
 export const suppliers = [
-  { id: 'sup-1', name: 'Nile Trading Co.' },
-  { id: 'sup-2', name: 'Delta Wholesale' },
-  { id: 'sup-3', name: 'Alexandria Imports' },
-  { id: 'sup-4', name: 'Cairo Industrial' },
+  { id: 'sup-1', name: 'Nile Trading Co.', contactName: 'Hossam Fathy', email: 'orders@niletrading.example', phone: '+20 100 555 0142', city: 'Cairo', notes: 'Main electronics and cleaning supplier. Ships within 48 hours.', status: 'active', createdAt: daysAgo(300) },
+  { id: 'sup-2', name: 'Delta Wholesale', contactName: 'Mona Adel', email: 'sales@deltawholesale.example', phone: '+20 100 555 0177', city: 'Mansoura', notes: '', status: 'active', createdAt: daysAgo(260) },
+  { id: 'sup-3', name: 'Alexandria Imports', contactName: 'Karim Salem', email: 'karim@aleximports.example', phone: '+20 100 555 0119', city: 'Alexandria', notes: 'Imported tools and devices. Longer lead time.', status: 'active', createdAt: daysAgo(200) },
+  { id: 'sup-4', name: 'Cairo Industrial', contactName: 'Dina Mostafa', email: 'supply@cairoindustrial.example', phone: '+20 100 555 0160', city: 'Cairo', notes: '', status: 'active', createdAt: daysAgo(150) },
+  { id: 'sup-5', name: 'Sinai Packaging Supply', contactName: 'Omar Nabil', email: 'omar@sinaipack.example', phone: '+20 100 555 0188', city: 'Suez', notes: 'Paused until the next pricing review.', status: 'inactive', createdAt: daysAgo(21) },
 ]
 
 const p = (n, sku, name, categoryId, supplierId, quantity, reorderLevel, price) => ({

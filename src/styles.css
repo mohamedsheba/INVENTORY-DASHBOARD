@@ -1033,3 +1033,5 @@ th.right .th-text {
   border-radius: var(--radius);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
+
+.low-count { color: var(--warn); font-weight: 600; }

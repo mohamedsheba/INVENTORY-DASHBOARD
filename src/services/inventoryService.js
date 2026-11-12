@@ -1,11 +1,12 @@
 // Data layer. Every function is async and returns plain objects, exactly like a Supabase call would.
 // When we move to Supabase, only THIS file changes — pages and components stay the same.
 
-import { categories as seedCategories, products as seedProducts, suppliers } from '../data/mock.js'
+import { categories as seedCategories, products as seedProducts, suppliers as seedSuppliers } from '../data/mock.js'
 import { normalizeName } from '../format.js'
 
 const PRODUCTS_KEY = 'stockroom.products.v1'
 const CATEGORIES_KEY = 'stockroom.categories.v1'
+const SUPPLIERS_KEY = 'stockroom.suppliers.v1'
 const LATENCY_MS = 350
 
 const wait = (ms = LATENCY_MS) => new Promise((resolve) => setTimeout(resolve, ms))
@@ -30,6 +31,7 @@ function write(key, value) {
 
 let productsDb = read(PRODUCTS_KEY, seedProducts)
 let categoriesDb = read(CATEGORIES_KEY, seedCategories)
+let suppliersDb = read(SUPPLIERS_KEY, seedSuppliers)
 
 /* ---------- Products ---------- */
 
@@ -66,9 +68,79 @@ export async function deleteProduct(id) {
 
 /* ---------- Suppliers ---------- */
 
+function assertUniqueSupplierName(name, ignoreId) {
+  const taken = suppliersDb.some((s) => s.id !== ignoreId && normalizeName(s.name) === normalizeName(name))
+  if (taken) throw new Error('A supplier with this name already exists.')
+}
+
+// Trims every text field so the stored data is always clean.
+function cleanSupplier(input) {
+  return {
+    name: input.name.trim(),
+    contactName: (input.contactName || '').trim(),
+    email: (input.email || '').trim(),
+    phone: (input.phone || '').trim(),
+    city: (input.city || '').trim(),
+    notes: (input.notes || '').trim(),
+    status: input.status,
+  }
+}
+
 export async function getSuppliers() {
   await wait(150)
-  return [...suppliers]
+  return [...suppliersDb]
+}
+
+export async function createSupplier(input) {
+  await wait()
+  assertUniqueSupplierName(input.name)
+  const supplier = { ...cleanSupplier(input), id: crypto.randomUUID(), createdAt: new Date().toISOString() }
+  suppliersDb = [supplier, ...suppliersDb]
+  write(SUPPLIERS_KEY, suppliersDb)
+  return supplier
+}
+
+export async function updateSupplier(id, input) {
+  await wait()
+  assertUniqueSupplierName(input.name, id)
+  let updated = null
+  suppliersDb = suppliersDb.map((s) => {
+    if (s.id !== id) return s
+    updated = { ...s, ...cleanSupplier(input) }
+    return updated
+  })
+  if (!updated) throw new Error('This supplier no longer exists.')
+  write(SUPPLIERS_KEY, suppliersDb)
+  return updated
+}
+
+// Same rule as categories: a supplier with products can only be deleted after choosing what happens to them.
+//   { action: 'move', targetSupplierId }  → products move to another supplier
+//   { action: 'delete' }                  → products are deleted with the supplier
+// In Supabase this whole function should be one database transaction (an RPC).
+export async function deleteSupplier(id, resolution = {}) {
+  await wait()
+  const inSupplier = productsDb.filter((p) => p.supplierId === id)
+  let count = 0
+
+  if (inSupplier.length > 0) {
+    if (resolution.action === 'move') {
+      const target = suppliersDb.find((s) => s.id === resolution.targetSupplierId && s.id !== id)
+      if (!target) throw new Error('Choose a valid supplier to move the products to.')
+      const now = new Date().toISOString()
+      productsDb = productsDb.map((p) => (p.supplierId === id ? { ...p, supplierId: target.id, updatedAt: now } : p))
+    } else if (resolution.action === 'delete') {
+      productsDb = productsDb.filter((p) => p.supplierId !== id)
+    } else {
+      throw new Error('This supplier still has products. Choose what to do with them first.')
+    }
+    count = inSupplier.length
+    write(PRODUCTS_KEY, productsDb)
+  }
+
+  suppliersDb = suppliersDb.filter((s) => s.id !== id)
+  write(SUPPLIERS_KEY, suppliersDb)
+  return { action: resolution.action ?? null, count }
 }
 
 /* ---------- Categories ---------- */
